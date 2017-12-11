@@ -13,7 +13,9 @@ import java.io.File;
 import java.util.*;
 
 public class ArrivalsApi {
-	String basePath = "https://jack9283.azurewebsites.net";
+	
+	//switched from azure a bit slower but this isnt really an issue as its now free!!
+	String basePath = "https://jack9283.apphb.com";
 	ApiInvoker apiInvoker = ApiInvoker.getInstance();
 
 	public ApiInvoker getInvoker() {
@@ -66,8 +68,8 @@ public class ArrivalsApi {
 
     try {
       String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType);
-      System.out.println(response);
       if(response != null){
+    	  System.out.println(response);
         return (ArrivalsBoard) ApiInvoker.deserialize(response, "", ArrivalsBoard.class);
       }
       else {
