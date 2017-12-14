@@ -11,12 +11,17 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Scanner;
 
 import com.apphb.huxley.client.*;
 import com.apphb.huxley.huxley.api.*;
 import com.apphb.huxley.huxley.model.*;
+import com.sun.javafx.image.impl.ByteIndexed.Getter;
+
+import javafx.scene.input.DataFormat;
 
 public class Main {
 
@@ -24,6 +29,7 @@ public class Main {
 	private static String id = "SLY";
 	private static boolean debug = true;
 	private static ArrayList<String> checked;
+	private static HashMap<String, Integer> greatestDelay = new HashMap<String, Integer>(); 
 
 	public static void main(String[] args) {
 		bigLoop();
@@ -52,20 +58,54 @@ public class Main {
 
 	public static void update() {
 		ArrivalsBoard arrivals = getJsonObject();
+		
 		DateFormat dateFormat = new SimpleDateFormat("HH:mm");
 		Date currentTime = new Date();
-		System.out.println(dateFormat.format(currentTime));
+		String[] current = (dateFormat.format(currentTime)).split(":");
+		int currentHour = Integer.valueOf(current[0]);
+		int currentMinute = Integer.valueOf(current[1]);
+		
+		//resets when no trains running
+		if (currentHour == 4){
+			writeArrayList(new ArrayList<String>());
+		}
 		
 		
 		for (TrainServicesField train : arrivals.getTrainServicesField()) {
 			
-			if (train.getEtaField().equals("On time")){
+			if (train.getEtaField().equals("On time") || train.getEtaField().equals("Delayed")){
 				continue;
 			} else {
 				try {
-					Date trainETA = dateFormat.parse(train.getEtaField());
-					System.out.println(currentTime.getTime() -  trainETA.getTime());
-				} catch (ParseException e) {
+					
+					String[] trainSta = (train.getStaField()).split(":");
+					int staHour = Integer.valueOf(trainSta[0]);
+					int staMinute = Integer.valueOf(trainSta[1]);
+					
+					String[] trainETA = (train.getEtaField()).split(":");
+					int etaHour = Integer.valueOf(trainETA[0]);
+					int etaMinute = Integer.valueOf(trainETA[1]);
+					
+					System.out.println(getTimeDiff(currentHour, currentMinute, etaHour, etaMinute));
+					
+					int delay = 0;
+					
+					//if the delay amount has increased
+					if (greatestDelay.containsKey(train.getrsidField()) && ((delay = getTimeDiff(staHour, staMinute, etaHour, etaMinute)) > greatestDelay.get(train.getrsidField()))){
+						updateData(delay-greatestDelay.get(train.getrsidField()));
+						greatestDelay.put(train.getrsidField(), delay);
+					}
+					
+					//if there is a delay thats not already been added
+					if (!checked.contains(train.getrsidField()) && (getTimeDiff(currentHour, currentMinute, etaHour, etaMinute)<6)){
+						delay = getTimeDiff(staHour, staMinute, etaHour, etaMinute);
+						updateData(delay);
+						checked.add(train.getrsidField());
+						writeArrayList(checked);
+						greatestDelay.put(train.getrsidField(), delay);
+					}
+					
+				} catch (Exception e) {
 					System.out.println("error in date parsing");
 				}
 			}
@@ -81,11 +121,24 @@ public class Main {
 		}
 	}
 	
+	public static int getTimeDiff(int staHour, int staMins, int etaHour, int etaMins){
+				
+		int diff = 0;
+		
+		if (staHour != etaHour){
+			diff = (((etaHour-staHour) * 60) - staMins) + etaMins;
+		} else {
+			diff = (etaMins - staMins);
+		}
+		
+		return diff;
+	}
+	
 	public static void writeArrayList(ArrayList<String> arr){
 		try{
 		FileWriter writer = new FileWriter("checked.txt"); 
 		for(String str: arr) {
-		  writer.write(str);
+		  writer.write(str + "\n");
 		}
 		writer.close();
 		} catch (Exception e) {
@@ -106,6 +159,14 @@ public class Main {
 			System.out.println(e.getMessage());
 		}
 		return list;
+	}
+	
+	public static void updateData(int data){
+		try{
+		setData(Integer.valueOf(getFile()) + data);
+		}catch (Exception e) {
+			System.out.println("error updating the data");
+		}
 	}
 
 	public static void setData(int data) {
