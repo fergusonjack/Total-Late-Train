@@ -1,6 +1,6 @@
 #padder {
-    padding-left: 800px;
-    padding-right: 100px;
+    padding-left: 50px;
+    padding-right: 50px;
     font-size: 60px;
 }
 
@@ -10,4 +10,8 @@
     font-size: 48px;
     font-family: 'Shift', sans-serif;
 
+}
+
+#makeCenter {
+    text-align: center;
 }

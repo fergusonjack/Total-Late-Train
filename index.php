@@ -4,6 +4,12 @@
 
     <?php
         $title = "Selly Oak Late";
+        $fileData = array();
+        $file = fopen("current.txt", "r");
+        while (!feof($file) ) {
+            $line = fgets($file);
+            $fileData[] = explode(' ', $line);
+        }
     ?>
 
     <title><?php echo $title; ?></title>
@@ -31,9 +37,15 @@
 <div>
 
     <div class="jumbotron" id="padder">
-        <h1 class="time">000:00</h1>
+        <h1 class="heading" id="makeCenter">Since: <?php echo implode(" ", $fileData[1]); ?></h1>
+        <h1 class="time" id="makeCenter">Delay (hr:min): 000:00</h1>
     </div>
 
+</div>
+
+
+<div class="container">
+    <div class="center">&copy <?php echo date("Y"); ?> Jack Ferguson</div>
 </div>
 
 </body>

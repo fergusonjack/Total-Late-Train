@@ -8,7 +8,7 @@ function getTime() {
         data: { datas:"Selly" }
     })
         .done(function( msg ) {
-            $(".time").html(msg);
+            $(".time").html("Delay (hr:min): " + msg);
         });
 
     console.log("jack");

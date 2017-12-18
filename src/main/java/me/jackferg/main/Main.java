@@ -37,6 +37,7 @@ public class Main {
 
 	public static void bigLoop() {
 
+		intaliseFile();
 		checked = fileToArrayList();
 		
 		while (true) {
@@ -169,11 +170,23 @@ public class Main {
 		}
 	}
 
+	//TODO need to add abilty to take date from file and add it back
 	public static void setData(int data) {
+		String text1 = "";
+		try {
+			BufferedReader brTest = new BufferedReader(new FileReader("current.txt"));
+			brTest.readLine();
+			text1 = brTest.readLine();
+			brTest.close();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}		
+		
 		PrintWriter writer;
 		try {
 			writer = new PrintWriter("current.txt");
-			writer.print(data);
+			writer.println(data);
+			writer.println(text1);
 			writer.close();
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -228,6 +241,28 @@ public class Main {
 			System.exit(0);
 		}
 		return text;
+	}
+	
+	public static void intaliseFile(){
+		String[] toInput = new String[2];
+		toInput[0] = "0";
+		
+		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm");
+		Date date = new Date();
+		toInput[1] = dateFormat.format(date);
+		try{
+			FileWriter writer = new FileWriter("current.txt"); 
+			for(String str: toInput) {
+			  writer.write(str + "\n");
+			}
+			writer.close();
+			
+			writer = new FileWriter("checked.txt"); 
+			writer.write("");
+			
+			} catch (Exception e) {
+				System.out.println("error with the writing of the array to a file");
+			}
 	}
 
 }
