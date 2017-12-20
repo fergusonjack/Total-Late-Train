@@ -17,7 +17,4 @@ http://restunited.com/releases/430721415517308710/wrappers however the code had 
 being passed through.
 
 # TODO
-  - Quite a bit still
-  - Entire web page needs to be built (PHP + bootstrap taking data from txt file to start with will migrate to a dataBase system)
-    - Get domain and route to digitalOcean already setup
-  - Methods for getting data into the text file edge cases needed to be dealt with for the train timings
+  - migrate to a dataBase system
