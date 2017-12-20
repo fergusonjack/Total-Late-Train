@@ -69,7 +69,7 @@ public class ArrivalsApi {
     try {
       String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType);
       if(response != null){
-    	System.out.println(response);
+    	//System.out.println(response);
         return (ArrivalsBoard) ApiInvoker.deserialize(response, "", ArrivalsBoard.class);
       }
       else {

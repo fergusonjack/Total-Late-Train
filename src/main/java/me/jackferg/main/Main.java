@@ -72,6 +72,10 @@ public class Main {
 		if (currentHour == 4) {
 			writeArrayList(new ArrayList<String>());
 		}
+		
+		if (arrivals.getTrainServicesField().isEmpty()){
+			return;
+		}
 
 		for (TrainServicesField train : arrivals.getTrainServicesField()) {
 
