@@ -12,7 +12,7 @@ However, if you do not have Maven I have included a pre-compiled jar file which 
 
 # System flow
 This is done using the Darwin UK National Rail Live Departure Board SOAP API, this is then converted from SOAP to JSON 
-by http://jack9283.azurewebsites.net/ which is forked from https://github.com/jpsingleton/Huxley. This is then parsed using code from 
+by https://jack9283.apphb.com/ which is forked from https://github.com/jpsingleton/Huxley. This is then parsed using code from 
 http://restunited.com/releases/430721415517308710/wrappers however the code had to be modified to work correctly with the modern JSON
 being passed through.
 
